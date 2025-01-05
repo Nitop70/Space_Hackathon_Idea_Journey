@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hackathon Space Adventure</title>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Press Start 2P", cursive;
+        background: linear-gradient(
+          to bottom,
+          #87ceeb,
+          #87ceeb 80%,
+          #32cd32 80%
+        );
+        overflow: hidden;
+        height: 100vh;
+        position: relative;
+      }
+
+      .header {
+        position: absolute;
+        top: 10px;
+        width: 100%;
+        text-align: center;
+        font-size: 1.5rem;
+        color: #ffffff;
+        text-shadow: 2px 2px #000000;
+      }
+
+      .ground {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 15%;
+        background: #32cd32;
+      }
+
+      .cloud {
+        position: absolute;
+        background: white;
+        width: 100px;
+        height: 50px;
+        border-radius: 50%;
+        box-shadow: 30px 0 0 white, 60px 0 0 white;
+        animation: float 5s infinite alternate ease-in-out;
+      }
+
+      .cloud:nth-child(2) {
+        top: 10%;
+        left: 15%;
+        animation-duration: 6s;
+      }
+
+      .cloud:nth-child(3) {
+        top: 15%;
+        right: 20%;
+        animation-duration: 7s;
+      }
+
+      .cloud:nth-child(4) {
+        top: 8%;
+        left: 50%;
+        animation-duration: 8s;
+      }
+
+      @keyframes float {
+        from {
+          transform: translateY(0);
+        }
+        to {
+          transform: translateY(-10px);
+        }
+      }
+
+      .rocket-container {
+        position: absolute;
+        bottom: 20%;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .text-boxes {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .rocket-section {
+        width: 250px;
+        height: 100px;
+        border: 3px solid #228b22;
+        background: white;
+        color: black;
+        border-radius: 10px;
+        position: relative;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 0.8rem;
+        line-height: 1.2;
+      }
+
+      .rocket-section textarea {
+        width: calc(100% - 20px);
+        height: calc(100% - 20px);
+        border: none;
+        background: transparent;
+        color: black;
+        font-size: 0.8rem;
+        line-height: 1.2;
+        resize: none;
+        overflow: hidden;
+        outline: none;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      .rocket-section textarea::placeholder {
+        color: rgba(0, 0, 0, 0.5);
+        font-style: italic;
+      }
+
+      .rocket {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 40px;
+      }
+
+      .rocket-body {
+        width: 100px;
+        height: 200px;
+        background: linear-gradient(to bottom, #1e90ff, #00008b);
+        border-radius: 10px;
+        position: relative;
+      }
+
+      .rocket-tip {
+        width: 0;
+        height: 0;
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
+        border-bottom: 80px solid #ffffff;
+        position: absolute;
+        top: -70px;
+      }
+
+      .rocket-boosters {
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        bottom: -30px;
+        width: 100%;
+      }
+
+      .booster {
+        width: 30px;
+        height: 60px;
+        background: #006400;
+        border-radius: 3px;
+      }
+
+      .launch-button {
+        position: relative;
+        background: red;
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        padding: 15px 25px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 0 10px #ff6347, 0 0 20px #ff4500;
+        margin-top: -10px;
+      }
+
+      .launch-button:hover {
+        box-shadow: 0 0 10px violet, 0 0 20px blue, 0 0 30px green,
+          0 0 40px yellow, 0 0 50px orange, 0 0 60px red;
+      }
+
+      /* Space Page Styles */
+      .space-page {
+        background: black;
+        color: white;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start;
+        position: relative;
+        overflow: hidden;
+        padding-top: 20px;
+      }
+
+      .page-header {
+        margin-top: 10px;
+        font-size: 1.5rem;
+        text-shadow: 0 0 5px white, 0 0 10px blue;
+      }
+
+      .main-planet {
+        position: relative;
+        width: 150px;
+        height: 150px;
+        background: radial-gradient(circle, #1e90ff, #00008b);
+        border-radius: 50%;
+        margin-top: 50px;
+      }
+
+      .saturn-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 250px;
+        height: 50px;
+        background: rgba(173, 216, 230, 0.5);
+        transform: translate(-50%, -50%) rotate(15deg);
+        border-radius: 50%;
+      }
+
+      .rocket-small {
+        position: absolute;
+        bottom: 0;
+        width: 100px;
+        height: 200px;
+        background: linear-gradient(to bottom, #1e90ff, #00008b);
+        border-radius: 10px;
+        animation: fly-to-planet 3s ease forwards;
+      }
+
+      .rocket-small .rocket-tip {
+        width: 0;
+        height: 0;
+        border-left: 50px solid transparent;
+        border-right: 50px solid transparent;
+        border-bottom: 80px solid #ffffff;
+        position: absolute;
+        top: -70px;
+      }
+
+      .rocket-small .rocket-boosters {
+        display: flex;
+        justify-content: space-between;
+        position: absolute;
+        bottom: -30px;
+        width: 100%;
+      }
+
+      .rocket-small .booster {
+        width: 30px;
+        height: 60px;
+        background: #006400;
+        border-radius: 3px;
+      }
+
+      .idea-description {
+        text-align: center;
+        margin-top: 20px;
+        max-width: 600px;
+        font-size: 1rem;
+        line-height: 1.5;
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid white;
+        opacity: 0; /* Initially hidden */
+        transition: opacity 1s ease;
+      }
+
+      .colonize-button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        background: red;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        text-shadow: 0 0 5px yellow;
+      }
+
+      .colonize-button:hover {
+        box-shadow: 0 0 10px orange, 0 0 20px yellow, 0 0 30px white;
+      }
+
+      @keyframes fly-to-planet {
+        from {
+          transform: translateY(100vh);
+        }
+        to {
+          transform: translateY(-50px);
+        }
+      }
+
+      .star {
+        width: 2px;
+        height: 2px;
+        background: white;
+        border-radius: 50%;
+        position: absolute;
+      }
+
+      .small-planet {
+        position: absolute;
+        border-radius: 50%;
+        animation: twinkle 3s infinite alternate ease-in-out;
+      }
+
+      @keyframes twinkle {
+        from {
+          opacity: 1;
+        }
+        to {
+          opacity: 0.5;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">Hackathon Space Adventure!</div>
+    <div class="cloud" style="top: 5%; left: 10%"></div>
+    <div class="cloud" style="top: 10%; left: 40%"></div>
+    <div class="cloud" style="top: 15%; right: 30%"></div>
+    <div class="cloud" style="top: 20%; left: 70%"></div>
+
+    <div class="rocket-container">
+      <div class="text-boxes">
+        <div class="rocket-section">
+          <textarea
+            placeholder="Hackathon Description: "
+            id="description"
+          ></textarea>
+        </div>
+        <div class="rocket-section">
+          <textarea placeholder="Track: " id="track"></textarea>
+        </div>
+        <div class="rocket-section">
+          <textarea placeholder="Areas of Interest: " id="interest"></textarea>
+        </div>
+      </div>
+      <div class="rocket" id="rocket">
+        <div class="rocket-body">
+          <div class="rocket-tip"></div>
+          <div class="rocket-boosters">
+            <div class="booster"></div>
+            <div class="booster"></div>
+          </div>
+        </div>
+      </div>
+      <button class="launch-button" onclick="launchRocket()">LAUNCH</button>
+    </div>
+    <div class="ground"></div>
+
+    <script>
+      function launchRocket() {
+        const description = document.getElementById("description").value.trim();
+        const track = document.getElementById("track").value.trim();
+        const interest = document.getElementById("interest").value.trim();
+
+        if (!description || !track || !interest) {
+          alert("Please fill out all fields before launching!");
+          return;
+        }
+
+        const rocket = document.getElementById("rocket");
+        rocket.style.transform = "translateY(-200vh)";
+        rocket.style.transition = "transform 2s ease";
+
+        setTimeout(() => {
+          document.body.innerHTML = `
+        <div class="space-page">
+          <h2 class="page-header">Welcome to Your Idea Planet!</h2>
+          <div class="main-planet">
+            <div class="saturn-ring"></div>
+          </div>
+          <div class="rocket-small">
+            <div class="rocket-body">
+              <div class="rocket-tip"></div>
+              <div class="rocket-boosters">
+                <div class="booster"></div>
+                <div class="booster"></div>
+              </div>
+            </div>
+          </div>
+          <div class="idea-description">
+            <p>Your Hackathon Idea:</p>
+            <p><strong>Description:</strong> ${description}</p>
+            <p><strong>Track:</strong> ${track}</p>
+            <p><strong>Areas of Interest:</strong> ${interest}</p>
+          </div>
+          <!-- Buttons are now moved down -->
+          <div class="button-container">
+            <button class="colonize-button" onclick="navigateToPage3('${description}', '${track}', '${interest}')">Colonize the Planet</button>
+            <button class="return-button" onclick="returnToEarth()">Return to Earth</button>
+          </div>
+        </div>`;
+          addStarsAndPlanets();
+
+          const rocketSmall = document.querySelector(".rocket-small");
+          const ideaDescription = document.querySelector(".idea-description");
+
+          rocketSmall.style.animation = "fly-to-planet 3s ease forwards";
+          rocketSmall.addEventListener("animationend", () => {
+            rocketSmall.style.display = "none";
+            ideaDescription.style.opacity = "1"; // Make text appear after rocket disappears
+          });
+        }, 2000);
+      }
+
+      function navigateToPage3(description, track, interest) {
+        document.body.innerHTML = `
+      <div class="space-page">
+        <h2 class="page-header">Colonizing the Planet!</h2>
+        <div class="main-planet">
+          <div class="saturn-ring"></div>
+        </div>
+        <div class="product-overview">
+          <h3>Congratulations on completing your journey!</h3>
+          <p>You’ve successfully colonized your Idea Planet. Here's the final overview of your product:</p>
+          <ul>
+            <p>Idea generated</p>
+          </ul>
+          <div class="design-and-code">
+            <h4>Generated Design and Code:</h4>
+            <p>Your design and code will go here, powered by AI.</p>
+          </div>
+          <img src="path/to/product-image.jpg" alt="Product Overview" class="product-image" />
+        </div>
+        <button class="return-button" onclick="returnToEarth()">Return to Earth</button>
+      </div>`;
+      }
+
+      function addStarsAndPlanets() {
+        const spacePage = document.querySelector(".space-page");
+
+        // Add stars
+        for (let i = 0; i < 100; i++) {
+          const star = document.createElement("div");
+          star.classList.add("star");
+          star.style.top = `${Math.random() * 100}vh`;
+          star.style.left = `${Math.random() * 100}vw`;
+          spacePage.appendChild(star);
+        }
+
+        // Add smaller planets
+        for (let i = 0; i < 10; i++) {
+          const planet = document.createElement("div");
+          planet.classList.add("small-planet");
+          const size = Math.random() * 50 + 10;
+          planet.style.width = `${size}px`;
+          planet.style.height = `${size}px`;
+          const topPos = Math.random() * 80 + 10;
+          const leftPos =
+            Math.random() > 0.5 ? Math.random() * 40 : Math.random() * 40 + 60;
+          planet.style.top = `${topPos}vh`;
+          planet.style.left = `${leftPos}vw`;
+          planet.style.background = `radial-gradient(circle, ${getRandomColor()}, ${getRandomColor()})`;
+          spacePage.appendChild(planet);
+        }
+      }
+
+      function getRandomColor() {
+        const letters = "0123456789ABCDEF";
+        let color = "#";
+        for (let i = 0; i < 6; i++) {
+          color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+      }
+
+      function returnToEarth() {
+        location.reload(); // Reloads the page to bring back Page 1
+      }
+    </script>
+  </body>
+</html>
